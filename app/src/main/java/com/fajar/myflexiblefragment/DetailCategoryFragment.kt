@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 
 class DetailCategoryFragment : Fragment() {
@@ -36,17 +37,28 @@ class DetailCategoryFragment : Fragment() {
         tvCategoryDescription = view.findViewById(R.id.tv_category_description)
         btnProfile = view.findViewById(R.id.btn_profile)
         btnShowDialog = view.findViewById(R.id.btn_show_dialog)
+        btnShowDialog.setOnClickListener {
+            val optionDialogFragment = OptionDialogFragment()
+            val fragmentManager = childFragmentManager
+            optionDialogFragment.show(fragmentManager, OptionDialogFragment::class.java.simpleName)
+        }
 
-        if(savedInstanceState != null){
-            val descFromBundle =savedInstanceState.getString(EXTRA_DESCRIPTION)
+        if (savedInstanceState != null) {
+            val descFromBundle = savedInstanceState.getString(EXTRA_DESCRIPTION)
             description = descFromBundle
         }
 
-        if(arguments != null){
+        if (arguments != null) {
             val categoryName = arguments?.getString(EXTRA_NAME)
             tvCategoryName.text = categoryName
             tvCategoryDescription.text = description
         }
     }
 
+    internal var optionDialogListener: OptionDialogFragment.OnOptionDialogListener =
+        object : OptionDialogFragment.OnOptionDialogListener {
+            override fun onOptionChosen(text: String?) {
+                Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show()
+            }
+        }
 }
